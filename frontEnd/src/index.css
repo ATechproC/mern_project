@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+    }
+
+    body {
+        background-color: #fff;
+        height: 100vh;
+    }
+}
+
+@layer components {
+
+    .open {
+        animation: animation-in 2s ease forwards;
+    }
+
+    .close {
+        animation: animation-out 2s ease forwards;
+    }
+
+    @keyframes animation-in {
+        0% {
+            right: 100%;
+        }
+
+        100% {
+            right: 0;
+        }
+    }
+
+    @keyframes animation-out {
+        0% {
+            right: 100%;
+        }
+
+        100% {
+            right: 0;
+        }
+    }
+
+}
+
+@layer utilities {
+    .flex-center {
+        @apply flex items-center justify-center
+    }
+
+    .flex-between {
+        @apply flex items-center justify-between
+    }
+
+    .flex-items {
+        @apply flex items-center
+    }
+
+    .flex-column {
+        @apply flex flex-col
+    }
+
+    .center-element-absolute {
+        @apply absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]
+    }
+
+    .input-style { 
+        @apply px-2 py-1 border-[2px] border-gray-500 rounded-[10px];
+    }
+}
