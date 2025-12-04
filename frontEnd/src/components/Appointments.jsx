@@ -1,7 +1,38 @@
 import React from 'react'
 import { assets } from '../assets/assets_frontend/assets'
+import { useApp } from '../providers/AppProvider'
+import axios from "axios";
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const Appointments = () => {
+
+    const { backendURL, token } = useApp();
+
+    const [appointments, setAppointments] = useState([]);
+
+    const fetchUserAppointments = async () => {
+        try {
+            const { data: { data } } = await axios.post(backendURL + "/api/v1/users/my-appointments", {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setAppointments(data);
+        } catch (err) {
+            let error;
+            if (err.response) error = err.response.data.message || err.response.data.errors[0].msg;
+            else error = err.message;
+            toast.error(error);
+        }
+    }
+
+    useEffect(() => {
+        fetchUserAppointments();
+    }, []);
+
+
     return <div className='relative'>
         <p className='text-[25px] font-semibold py-5'>My appointments</p>
         <div className='border-[2px] border-gray-400'>
@@ -27,6 +58,7 @@ const Appointments = () => {
                 <button className=' border-[1px] border-black px-3 py-1 rounded-[20px]'>Cancel appointment</button>
             </div>
         </div>
+
     </div>
 }
 

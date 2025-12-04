@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useApp } from '../providers/AppProvider';
+import { useNavigate } from 'react-router';
 
 const BookingSlots = ({ doctorInfo, doctorId }) => {
 
@@ -15,6 +16,8 @@ const BookingSlots = ({ doctorInfo, doctorId }) => {
     const [timeSlotIndex, setTimeSlotIndex] = useState(0);
 
     const [docSlots, setDocSlots] = useState([]);
+
+    const navigate = useNavigate();
 
     const getAvailbleSlots = () => {
 
@@ -57,7 +60,6 @@ const BookingSlots = ({ doctorInfo, doctorId }) => {
                 currentSlot.setMinutes(currentSlot.getMinutes() + 30);
             }
 
-
             if (timeSlots.length > 0) {
                 allSlots.push({
                     id: allSlots.length + 1,
@@ -66,11 +68,10 @@ const BookingSlots = ({ doctorInfo, doctorId }) => {
                     slot: timeSlots,
                     isSelected: false
                 });
+                // }
             }
 
         }
-
-        // console.log(allSlots)
 
         setDocSlots(allSlots);
     }
@@ -108,15 +109,24 @@ const BookingSlots = ({ doctorInfo, doctorId }) => {
         setDocSlots(newDocSlots);
     }
 
+    const [slots_books, setSlots_books] = useState([]);
+
     const bookAppointment = async () => {
         try {
-            const { data: { message } } = await axios.post(backendURL + "/api/v1/users/book-appointment", { slotTime, slotDate, doctorId }, {
+
+            if (!token) {
+                toast.warn("Login to Book");
+                return navigate("/signup");
+            }
+
+            const { data: { message, slots_books } } = await axios.post(backendURL + "/api/v1/users/book-appointment", { slotTime, slotDate, doctorId }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             })
-
+            setSlots_books(slots_books)
             toast.success(message);
+            navigate("/appointments");
         } catch (err) {
             let error;
             if (err.response) error = err.response.data.message || err.response.data.errors[0].msg;

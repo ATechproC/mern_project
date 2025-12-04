@@ -49,6 +49,11 @@ exports.bookAppointment = async_handler(async (req, res) => {
 
     await Doctor.findByIdAndUpdate(doctorId, { slots_books });
 
-    res.status(200).json({ message: "Appointment booked successfully" });
+    res.status(200).json({ message: "Appointment booked successfully", slots_books });
 
+});
+
+exports.my_appointments = async_handler(async (req, res) => {
+    const appointments = await Appointment.find({ userId: req.user._id });
+    res.status(200).json({ data: appointments });
 })

@@ -22,7 +22,9 @@ const {
 const { protect } = require("../controllers/userAuthController");
 const { uploadImage, uploadImageMiddleware } = require("../controllers/uploadController");
 
-const { bookAppointment, get_user_id } = require("../controllers/appointmentController");
+const { bookAppointment, get_user_id, my_appointments,
+    // bookedAppoitment 
+} = require("../controllers/appointmentController");
 const { bookAppointment_validator } = require("../utils/validators/appointmentValidator");
 
 const router = express.Router();
@@ -62,6 +64,8 @@ router.put("/change-password/:id", change_user_password_validator, change_user_p
 
 router.delete("/delete-user/:id", delete_user_data_validator, delete_user_data);
 
-router.post("/book-appointment", protect, get_user_id, bookAppointment_validator, bookAppointment)
+router.post("/book-appointment", protect, get_user_id, bookAppointment_validator, bookAppointment);
+
+router.post("/my-appointments", protect, my_appointments);
 
 module.exports = router;
