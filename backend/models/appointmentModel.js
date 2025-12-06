@@ -10,7 +10,7 @@ const appointmentSchema = new mongoose.Schema({
     userData: {
         type: Object
     },
-    docData: {
+    doctorData: {
         type: Object
     },
     amount: {
@@ -33,11 +33,9 @@ const appointmentSchema = new mongoose.Schema({
     ,
     userId: {
         type: mongoose.Schema.ObjectId,
-        ref: "User"
     },
     doctorId: {
         type: mongoose.Schema.ObjectId,
-        ref: "Doctor"
     }
 }, {
     timestamps: true

@@ -2,9 +2,11 @@ const async_handler = require("express-async-handler");
 const Doctor = require("../models/doctorModel");
 const User = require("../models/userModel");
 const Appointment = require("../models/appointmentModel");
+const ApiError = require("../utils/ApiError");
 
-exports.get_user_id = async_handler(async (req, res, next) => {
+exports.get_user_id = async_handler((req, res, next) => {
     req.body.userId = req.user._id;
+    console.log(req.body.userId);
     next();
 })
 
@@ -56,4 +58,15 @@ exports.bookAppointment = async_handler(async (req, res) => {
 exports.my_appointments = async_handler(async (req, res) => {
     const appointments = await Appointment.find({ userId: req.user._id });
     res.status(200).json({ data: appointments });
+})
+
+exports.cancelAppointment = async_handler(async (req, res, next) => {
+    const { userId, appointmentId } = req.body;
+    const appointment = await Appointment.findById(appointmentId);
+    if (!appointment.userId.equals(userId)) {
+        return next(new ApiError("Unauthorized action", 401));
+    }
+    appointment.cancelled = true;
+    await appointment.save();
+    res.status(200).json({ message: "Appointment cancelled" });
 })

@@ -23,6 +23,7 @@ import Appointments from "./components/Appointments";
 import ChangeSpecialityProvider from "./providers/ChangeSpecialityProvider";
 import AppProvider from "./providers/AppProvider";
 import { ToastContainer } from 'react-toastify';
+// import DoctorsPorvider from "./providers/DoctorsPorvider";
 
 const App = () => {
 
@@ -53,10 +54,12 @@ const App = () => {
   return (
     <div className="w-[80%] m-auto mt-[10px] overflow-hidden">
       <AppProvider>
-        <ChangeSpecialityProvider>
-          <RouterProvider router={router} />
-          <ToastContainer />
-        </ChangeSpecialityProvider>
+        {/* <DoctorsPorvider> */}
+          <ChangeSpecialityProvider>
+            <RouterProvider router={router} />
+            <ToastContainer />
+          </ChangeSpecialityProvider>
+        {/* </DoctorsPorvider> */}
       </AppProvider>
     </div>
   )

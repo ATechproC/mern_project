@@ -27,7 +27,8 @@ const doctorSchema = new mongoose.Schema({
     },
     specialty: {
         type: String,
-        required: [true, "Doctor specialty is required"]
+        required: [true, "Doctor specialty is required"],
+        lowercase : true
     },
     degree: {
         type: String,

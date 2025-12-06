@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useApp } from '../providers/AppProvider'
 import axios from "axios"
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router'
+import { useChangeSpeciality } from '../providers/ChangeSpecialityProvider'
+// import { useDoctors } from '../providers/DoctorsPorvider'
 
 const BoxOfCards = () => {
 
@@ -10,11 +12,12 @@ const BoxOfCards = () => {
 
     const { backendURL } = useApp();
 
-    const [doctors, setDoctors] = useState([]);
+    const { doctors, setDoctors } = useChangeSpeciality();
 
     const getAllDoctors = async () => {
         try {
             const { data: { data } } = await axios.get(backendURL + "/api/v1/doctors");
+            // console.log(data)
             setDoctors(data);
         } catch (err) {
             let error;

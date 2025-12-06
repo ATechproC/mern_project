@@ -112,6 +112,7 @@ const BookingSlots = ({ doctorInfo, doctorId }) => {
     const [slots_books, setSlots_books] = useState([]);
 
     const bookAppointment = async () => {
+
         try {
 
             if (!token) {
@@ -124,9 +125,12 @@ const BookingSlots = ({ doctorInfo, doctorId }) => {
                     Authorization: `Bearer ${token}`
                 }
             })
+
             setSlots_books(slots_books)
-            toast.success(message);
-            navigate("/appointments");
+            if(message === "Slot is not available" || message === "Doctor is not available") toast.warn(message);
+            else toast.success(message);
+            if(message === "Appointment booked successfully") navigate("/appointments");
+            
         } catch (err) {
             let error;
             if (err.response) error = err.response.data.message || err.response.data.errors[0].msg;

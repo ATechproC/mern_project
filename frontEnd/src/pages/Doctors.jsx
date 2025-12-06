@@ -1,6 +1,5 @@
 import React from 'react'
 import BoxOfCard from '../components/BoxOfCards'
-import { doctors } from '../assets/assets_frontend/assets'
 import Button from '../components/Button'
 import Footer from "../components/Footer";
 import { useParams } from 'react-router';
@@ -25,7 +24,6 @@ const Doctors = () => {
         <Button speciality="gastroenterologist" />
       </div>
       <BoxOfCard
-        doctors={doctors}
       />
     </div>
     <Footer />

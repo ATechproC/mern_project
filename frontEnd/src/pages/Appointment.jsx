@@ -10,17 +10,11 @@ import axios from "axios"
 
 const Appointment = () => {
 
-    const { backendURL, token } = useApp();
+    const { backendURL} = useApp();
 
     const { doctorId } = useParams();
 
     const [doctorData, setDoctorData] = useState([]);
-
-    // const fetchDoctoInfo = (doctorId) => {
-    //     doctors.forEach((doctorData) => {
-    //         if (doctorData._id === doctorId) setdoctorData(doctorData);
-    //     })
-    // }
 
     useEffect(() => {
         fetchDoctorData(doctorId);

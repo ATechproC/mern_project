@@ -68,7 +68,12 @@ const NavBar = () => {
     }
 
     return <nav className="relative px-5 flex-between">
-        <div className="cursor-pointer w-[180px] overflow-hidden">
+        <div
+            onClick={() => {
+                navigate("/");
+                scrollTo(0, 0);
+            }}
+            className="cursor-pointer w-[180px] overflow-hidden">
             <img
                 className="object-contain w-full"
                 src={assets.logo}
@@ -98,7 +103,7 @@ const NavBar = () => {
                 <div className="w-[45px] h-[45px] rounded-full overflow-hidden cursor-pointer">
                     <img
                         className="w-full h-full"
-                        src={userData.image ? userData.image : assets.upload_area}      
+                        src={userData.image ? userData.image : assets.upload_area}
                         draggable={false}
                     />
                 </div>

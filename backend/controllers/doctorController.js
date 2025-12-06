@@ -8,6 +8,7 @@ const { pagination } = require("../utils/pagination");
 exports.add_new_doctor = async_handler(async (req, res) => {
 
     req.body.slug = slugify(req.body.name);
+    req.body.specialty = slugify(req.body.specialty);
     const newDoctor = new Doctor(req.body);
     await newDoctor.save();
 
@@ -16,11 +17,20 @@ exports.add_new_doctor = async_handler(async (req, res) => {
 
 exports.get_all_doctors = async_handler(async (req, res) => {
 
+    const filterObj = req.query;
+
+    const values = ["page", "limit"];
+
+    values.forEach(value => {
+        delete filterObj[value];
+    })
+
+
     const limit = req.query.limit || 10;
     const page = req.query.page || 1;
     const skip = (page - 1) * limit;
 
-    const doctors = await Doctor.find().skip(skip).limit(limit).select("-password");
+    const doctors = await Doctor.find(filterObj).skip(skip).limit(limit).select("-password");
 
     const numberOfDocument = await Doctor.countDocuments();
 
