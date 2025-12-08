@@ -6,7 +6,6 @@ const ApiError = require("../utils/ApiError");
 
 exports.get_user_id = async_handler((req, res, next) => {
     req.body.userId = req.user._id;
-    console.log(req.body.userId);
     next();
 })
 
@@ -60,6 +59,11 @@ exports.my_appointments = async_handler(async (req, res) => {
     res.status(200).json({ data: appointments });
 })
 
+exports.adminAppointments = async_handler(async (req, res) => {
+    const appointments = await Appointment.find();
+    res.status(200).json({ data: appointments });
+})
+
 exports.cancelAppointment = async_handler(async (req, res, next) => {
     const { userId, appointmentId } = req.body;
     const appointment = await Appointment.findById(appointmentId);
@@ -69,4 +73,35 @@ exports.cancelAppointment = async_handler(async (req, res, next) => {
     appointment.cancelled = true;
     await appointment.save();
     res.status(200).json({ message: "Appointment cancelled" });
+});
+
+exports.adminCancelAppointment = async_handler(async (req, res, next) => {
+    const { id } = req.params;
+
+    const appointment = await Appointment.findById(id);
+
+    if(!appointment) {
+        return next(new ApiError("There is no Appointment for this id", 404));
+    }
+
+    appointment.cancelled = true;
+    await appointment.save();
+
+    res.status(200).json({message : "Appointment cancelled"});
+});
+
+exports.getDashData = async_handler(async (req, res) => {
+    
+    const appointments = await Appointment.find();
+    const users = await User.find();
+    const doctors = await Doctor.find();
+
+    const dashData = {
+        doctors : doctors.length,
+        patients : users.length,
+        appointments : appointments.length,
+        latestAppointment : appointments.slice(0, 5)
+    }
+
+    res.status(200).json({ data : dashData});
 })

@@ -23,6 +23,8 @@ const {
     change_availability_validator,
 } = require("../utils/validators/doctorValidator");
 const { uploadImageMiddleware, uploadImage } = require("../controllers/uploadController");
+const { adminAppointments, adminCancelAppointment, getDashData } = require("../controllers/appointmentController");
+const { cancelAppointmentAdminValidator } = require("../utils/validators/appointmentValidator");
 
 router.post("/login", login_validator, login);
 
@@ -45,14 +47,10 @@ router.put("/change-availability/:id",
     change_availability
 )
 
-// router.get("/", get_all_doctors);
+router.get("/appointments",protect, adminAppointments);
 
-// router.get("/:id", get_doctor_by_id_validator, get_doctor_by_id);
+router.post("/cancel-appointment/:id", protect, cancelAppointmentAdminValidator, adminCancelAppointment);
 
-// router.put("update-doctor/:id", update_doctor_data_validator, update_doctor_data);
-
-// router.put("/change-password/:id", change_doctor_password)
-
-// router.delete("/delete-doctor/:id", delete_doctor_data_validator, delete_doctor_data);
+router.get("/get-dashData", protect, getDashData);
 
 module.exports = router;

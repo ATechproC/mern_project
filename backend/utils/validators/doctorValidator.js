@@ -219,3 +219,47 @@ exports.change_doctor_password_validator = [
 
     validatorMiddleware
 ]
+
+exports.doctorLoginValidator = [
+    check("email")
+        .notEmpty()
+        .withMessage("email is required")
+        .bail()
+        .isEmail()
+        .withMessage("Invalid email format"),
+    check("password")
+        .notEmpty()
+        .withMessage("password is required"),
+    check("passwordConfirm")
+        .notEmpty()
+        .withMessage("password confirmation is required")
+        .custom((passwordConfirm, { req }) => {
+            if (!passwordConfirm || !req.body.password) return true;
+            if (passwordConfirm !== req.body.password) {
+                throw new Error("the password confirmation does not match");
+            }
+            return true;
+        }),
+
+    validatorMiddleware
+]
+
+exports.getSpecificAppointmentsValidator = [
+    check("id")
+        .notEmpty()
+        .withMessage("appointment id is required")
+        .bail()
+        .isMongoId()
+        .withMessage("Invalid appointment id format",)
+    , validatorMiddleware
+]
+
+exports.cancelAppointmentDoctorValidator = [
+    check("id")
+        .notEmpty()
+        .withMessage("Appointment Id is required")
+        .bail()
+        .isMongoId()
+        .withMessage("Invalid appointment id format")
+    , validatorMiddleware
+]

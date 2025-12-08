@@ -1,15 +1,12 @@
 import React from 'react'
-// import GetIcon from '../../utils/GetIcon';
-// import assets from "../../assets/assets_frontend/assets";
 
 import { FaCalendarAlt, FaHome } from 'react-icons/fa';
 import { MdOutlineAddBox } from 'react-icons/md';
 import { HiUserGroup } from "react-icons/hi2";
 import { FaUserDoctor } from "react-icons/fa6";
 import { FaTimes } from "react-icons/fa";
-import AdminSideBar from '../../components/AdminSideBar';
 import { useState } from 'react';
-import { useAdmin } from '../../providers/AdminProvider';
+import { useDoctor } from '../../providers/DoctorProvider';
 import { toast } from 'react-toastify'
 import { useEffect } from 'react';
 import axios from "axios"
@@ -35,28 +32,27 @@ const Box = ({ icon, number, type }) => {
     </div>
 }
 
-const AdminDashboard = () => {
+const DoctorDashboard = () => {
 
-    const [dashData, setDashData] = useState([]);
+    const [dashData, setDashData] = useState({});
 
-    const [latestAppointment, setLatestAppointment] = useState([]);
+    const [latestAppointments, setLatestAppointments] = useState([]);
 
-    const { aToken, backendURL } = useAdmin();
+    const { dToken, backendURL } = useDoctor();
 
     const fetchDashData = async () => {
         try {
 
-            if (!aToken) return toast.warn("Please login");
+            if (!dToken) return toast.warn("Please login");
 
-            const { data: { data } } = await axios.get(backendURL + "/api/v1/admin/get-dashData", {
+            const { data: { data } } = await axios.post(backendURL + "/api/v1/doctors/get-dashData", {}, {
                 headers: {
-                    Authorization: `Bearer ${aToken}`
+                    Authorization: `Bearer ${dToken}`
                 }
             })
-
-            console.log(data);
             setDashData(data);
-            setLatestAppointment(data.latestAppointment);
+            setLatestAppointments(data.latestAppointments);
+            console.log(data);
 
         } catch (err) {
             let error;
@@ -71,11 +67,10 @@ const AdminDashboard = () => {
     }, [])
 
     return <div className=''>
-        <AdminSideBar />
         <div className='w-[85%] absolute right-0 p-4'>
             {
                 dashData && <div className='justify-center gap-5 flex-items'>
-                    <Box number={dashData.doctors} type="Doctors" />
+                    <Box number={dashData.earings} type="Earings" />
                     <Box number={dashData.appointments} type="Appointments" />
                     <Box number={dashData.patients} type="Patients" />
                 </div>
@@ -84,7 +79,7 @@ const AdminDashboard = () => {
                 <h2 className='font-bold text-[25px] pb-2'>Latest Appointments</h2>
                 < div className='gap-3 flex-column' >
                     {
-                        (latestAppointment && latestAppointment.length > 0) && latestAppointment.map((item, index) => {
+                        (latestAppointments && latestAppointments.length > 0) && latestAppointments.map((item, index) => {
                             return < div key={index} className='relative flex-items gap-2 p-3 bg-gray-300 rounded-[10px] '>
                                 {
                                     !item.cancelled ? <FaTimes
@@ -113,4 +108,4 @@ const AdminDashboard = () => {
     </div >
 }
 
-export default AdminDashboard
+export default DoctorDashboard

@@ -23,6 +23,9 @@ import Appointments from "./components/Appointments";
 import ChangeSpecialityProvider from "./providers/ChangeSpecialityProvider";
 import AppProvider from "./providers/AppProvider";
 import { ToastContainer } from 'react-toastify';
+import ForgotPassword from "./components/ResetPassword/ForgotPassword";
+import VerifyResetCode from "./components/ResetPassword/VerifyResetCode";
+import ResetPassword from "./components/ResetPassword/ResetPassword";
 // import DoctorsPorvider from "./providers/DoctorsPorvider";
 
 const App = () => {
@@ -44,6 +47,9 @@ const App = () => {
           {/* <Route path="/admin2" element={<AdminPanel2 />} /> */}
         </Route>
         <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-resetCode" element={<VerifyResetCode />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/admin-login" element={<AdminForm />} />
         <Route path="/doctor-login" element={<DoctorForm />} />
         <Route path="*" element={<NotFound />} />

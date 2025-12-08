@@ -88,7 +88,12 @@ const Signup = () => {
                 className='px-2 py-1 font-semibold text-white bg-blue-500 rounded-[8px]'
                 type='submit'>{state === "signup" ? "Create Account" : "Login"}</button>
         </div>
-        <div className='gap-1 mt-3 flex-items'>
+        {
+            state !== "signup" && <div
+                onClick={() => navigate("/forgot-password")}
+                className='my-1 text-sm font-bold cursor-pointer text-main-color'>Forgot password?</div>
+        }
+        <div className='gap-1 flex-items'>
             <p className='text-[15px] text-gray-500'> {state === "signup" ? "Already have an account" : "Do not you have an account "} </p>
             <p
                 onClick={() => setState(prev => prev === "signup" ? "login" : "signup")}

@@ -68,6 +68,6 @@ router.post("/book-appointment", protect, get_user_id, bookAppointment_validator
 
 router.post("/my-appointments", protect, my_appointments);
 
-router.post("/cancel-appointment", protect, get_user_id, cancelAppointmentValidator, cancelAppointment);
+router.post("/cancel-appointment", protect, cancelAppointmentValidator, cancelAppointment);
 
 module.exports = router;

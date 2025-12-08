@@ -11,6 +11,8 @@ const AppProvider = ({ children }) => {
 
     const [token, setToken] = useState(localStorage.getItem("token") ? localStorage.getItem("token") : "");
 
+    const [email, setEmail] = useState("");
+
     const [userData, setUserData] = useState({
         image: "",
         name: "",
@@ -24,20 +26,21 @@ const AppProvider = ({ children }) => {
 
         try {
 
-            const { data: { data } } = await axios.get(backendURL + "/api/v1/users/get-logged-user-data", {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setUserData({
-                image: data.image ? data.image : "",
-                name: data.name ? data.name : "",
-                phone: data.phone ? data.phone : "",
-                address: data.address ? data.address : "",
-                gender: data.gender ? data.gender : "",
-                birthday: data.birthday ? data.birthday : ""
-            })
-            console.log(data);
+            if (token) {
+                const { data: { data } } = await axios.get(backendURL + "/api/v1/users/get-logged-user-data", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setUserData({
+                    image: data.image ? data.image : "",
+                    name: data.name ? data.name : "",
+                    phone: data.phone ? data.phone : "",
+                    address: data.address ? data.address : "",
+                    gender: data.gender ? data.gender : "",
+                    birthday: data.birthday ? data.birthday : ""
+                })
+            }
         } catch (err) {
             let error;
             if (err.response) error = err.response.data.message || err.response.data.errors[0].msg;
@@ -50,7 +53,7 @@ const AppProvider = ({ children }) => {
         getLoggedUserData();
     }, [])
 
-    return <AppContext.Provider value={{ backendURL, token, setToken, userData, setUserData, getLoggedUserData }}>
+    return <AppContext.Provider value={{ backendURL, token, setToken, userData, setUserData, getLoggedUserData, email, setEmail }}>
         {children}
     </AppContext.Provider>
 }

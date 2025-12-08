@@ -29,6 +29,7 @@ exports.login = async_handler(async (req, res, next) => {
     if (!user) return next(new ApiError("there is no user for this email", 404))
 
     const isHashedPassword = await bcrypt.compare(req.body.password, user.password);
+
     if (!user || !isHashedPassword) {
         return next(new ApiError("Invalid Credentials", 401));
     }
@@ -76,6 +77,7 @@ exports.protect = async_handler(async (req, res, next) => {
 
 exports.forgot_password = async_handler(async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
+
     if (!user) {
         return next(new ApiError("There is no user for this email", 404));
     }
@@ -103,14 +105,14 @@ exports.forgot_password = async_handler(async (req, res, next) => {
 
         user.passwordResetCode = undefined;
         user.passwordResetExpires = undefined;
-        user.passwordResetVerified = undefined;
+        user.passwordResetVerify = undefined;
 
         await user.save();
 
         return next(new ApiError("an error happened while trying to reset your password", 500))
     }
 
-    res.status(200).json({ status: "success", message: "email send successfully" });
+    res.status(200).json({ status: "success", message: "Reset code sent successfully" });
 });
 
 exports.verify_reset_code = async_handler(async (req, res, next) => {
@@ -136,8 +138,21 @@ exports.reset_password = async_handler(async (req, res, next) => {
 
     if (!user.passwordResetVerify) return next(new ApiError("the reset password is not verified yet", 400));
 
-    user.password = await bcrypt.hash(req.body.newPassword, 12);
+    // If we hash the password manually in the controller AND the pre-save hook
+    // hashes it again, we end up with a double-hashed password:
+
+    // This makes bcrypt.compare() fail during login, because the stored password
+    // no longer matches the entered password.
+
+    // user.password = await bcrypt.hash(req.body.newPassword, 12); wrong don't do that login it hashed the password twice
+    // the first time using the bcrypt and the second one after saving the password in the database use the pre-save hook
+    
+    user.password = req.body.newPassword;
+
     user.passwordChangedAt = Date.now();
+    user.passwordResetCode = undefined;
+    user.passwordResetExpires = undefined;
+    user.passwordResetVerify = undefined;
 
     await user.save();
 

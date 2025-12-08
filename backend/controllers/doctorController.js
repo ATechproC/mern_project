@@ -1,9 +1,16 @@
 const async_handler = require("express-async-handler");
 const { default: slugify } = require("slugify");
 const Doctor = require("../models/doctorModel");
+const Appointments = require("../models/appointmentModel");
 const ApiError = require("../utils/ApiError");
 const bcrypt = require("bcryptjs");
 const { pagination } = require("../utils/pagination");
+const jwt = require("jsonwebtoken");
+const Appointment = require("../models/appointmentModel");
+
+exports.createToken = (payload) => jwt.sign({ doctorId: payload }, process.env.JWT_SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRE_TIME
+});
 
 exports.add_new_doctor = async_handler(async (req, res) => {
 
@@ -65,6 +72,11 @@ exports.get_doctor_by_id = async_handler(async (req, res, next) => {
     res.status(200).json({ data: doctor })
 });
 
+exports.get_doctorId = async_handler(async (req, res, next) => {
+    req.params.id = req.doctor._id;
+    next();
+})
+
 exports.update_doctor_data = async_handler(async (req, res, next) => {
 
     const { id } = req.params;
@@ -118,4 +130,127 @@ exports.delete_doctor_data = async_handler(async (req, res, next) => {
     }
 
     res.status(200).json({ message: "doctor date deleted successfully", data: doctor })
+})
+
+exports.doctorLogin = async_handler(async (req, res, next) => {
+    const doctor = await Doctor.findOne({ email: req.body.email });
+
+    if (!doctor || !(await bcrypt.compare(req.body.password, doctor.password))) {
+        return next(new ApiError("Invalid Credentials", 401));
+    }
+
+    const token = this.createToken(doctor._id);
+
+    res.status(200).json({ token });
+});
+
+exports.protect = async_handler(async (req, res, next) => {
+
+    let token;
+
+    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+        token = req.headers.authorization.split(" ")[1];
+    }
+    if (!token) {
+        return next(new ApiError("Please try log in to get access to this resource!!", 401));
+    }
+
+
+    const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+    const doctor = await Doctor.findById(decode.doctorId);
+
+    if (!doctor) {
+        return next(new ApiError("Invalid token, please login in to get access to this resource", 401))
+    }
+
+    req.doctor = doctor;
+
+    next();
+
+});
+
+exports.gitDoctorId = async_handler(async (req, res, next) => {
+    req.params.id = req.doctor._id;
+    next();
+})
+
+exports.getSpecificAppointments = async_handler(async (req, res) => {
+
+    const appointments = await Appointments.find({ doctorId: req.params.id });
+
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 5;
+    const skip = (page - 1) * limit;
+
+    const numberOfDocuments = appointments.length;
+
+    const paginationResult = pagination(page, numberOfDocuments, limit, skip);
+
+    res.status(200).json({ result: appointments.length, pagination: paginationResult, data: appointments });
+});
+
+exports.doctorCancelAppointment = async_handler(async (req, res, next) => {
+    const { id } = req.params;
+
+    const appointment = await Appointment.findById(id);
+
+    if (!appointment) {
+        return next(new ApiError("There is no Appointment for this id", 404));
+    }
+
+    appointment.cancelled = true;
+    await appointment.save();
+
+    res.status(200).json({ message: "Appointment cancelled" });
+});
+
+exports.completedAppointment = async_handler(async (req, res, next) => {
+    const { id } = req.params;
+
+    const appointment = await Appointment.findById(id);
+
+    if (!appointment) {
+        return next(new ApiError("There is no Appointment for this id", 404));
+    }
+
+    appointment.isCompleted = true;
+    await appointment.save();
+
+    res.status(200).json({ message: "Appointment completed" });
+});
+
+exports.getDoctorDashData = async_handler(async (req, res) => {
+
+    const appointments = await Appointment.find({ doctorId: req.doctor._id });
+
+    const usersIds = [];
+
+    appointments.forEach(item => {
+        let isExist = false;
+
+        usersIds.forEach(id => {
+            if (id.equals(item.userId)) {
+                isExist = true;
+                return;
+            }
+        })
+
+        if (!isExist) usersIds.push(item.userId);
+    })
+
+    let earings = 0;
+
+    appointments.forEach(item => {
+        if (item.isCompleted) earings += item.amount;
+    })
+
+    const dashData = {
+        latestAppointments: appointments.slice(0, 5),
+        appointments: appointments.length,
+        patients: usersIds.length,
+        earings
+    }
+
+    res.status(200).json({ data: dashData })
 })

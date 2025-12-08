@@ -71,3 +71,25 @@ exports.cancelAppointmentValidator = [
 
     validatorMiddleware
 ]
+
+exports.cancelAppointmentAdminValidator = [
+    check("id")
+        .notEmpty()
+        .withMessage("Appointment Id is required")
+        .bail()
+        .isMongoId()
+        .withMessage("Invalid appointment id format"),
+
+    validatorMiddleware
+]
+
+exports.completeAppointmentValidator = [
+    check("id")
+        .notEmpty()
+        .withMessage("Appointment Id is required")
+        .bail()
+        .isMongoId()
+        .withMessage("Invalid appointment id format"),
+
+    validatorMiddleware
+]

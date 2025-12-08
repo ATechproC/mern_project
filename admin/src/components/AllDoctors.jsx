@@ -34,7 +34,7 @@ const AllDoctor = () => {
 
     const change_availability = async (_id) => {
         try {
-            await axios.post(backendURL + `/admin/change-availability/${_id}`, {}, {
+            await axios.put(backendURL + `/api/v1/admin/change-availability/${_id}`, {}, {
                 headers: {
                     Authorization: `Bearer ${aToken}`
                 }
@@ -55,10 +55,7 @@ const AllDoctor = () => {
                 doctors.map(({ _id, name, speciality, image, available }) => {
                     return <div
                         key={_id} className='border-gray-300 border-[1px] rounded-xl overflow-hidden hover:-translate-y-1 transition duration-300'>
-                        <div onClick={() => {
-                            navigate(`/appointments/${_id}`);
-                            scrollTo(0, 0);
-                        }} className='bg-secondary-color h-[300px] cursor-pointer'>
+                        <div className='bg-secondary-color h-[300px] cursor-pointer'>
                             <img src={image} draggable={false} className='w-full h-full object-fit' />
                         </div>
                         <div className='p-3 text-center bg-white'>

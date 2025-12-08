@@ -16,6 +16,7 @@ const Doctors = () => {
   return <>
     <div className='flex gap-5 py-5 flex-column md:flex-row'>
       <div className='gap-3 flex-column'>
+        <Button speciality="all" />
         <Button speciality="general-physician" />
         <Button speciality="gynecologist" />
         <Button speciality="dermatologist" />
@@ -23,8 +24,7 @@ const Doctors = () => {
         <Button speciality="neurologist" />
         <Button speciality="gastroenterologist" />
       </div>
-      <BoxOfCard
-      />
+      <BoxOfCard />
     </div>
     <Footer />
   </>
