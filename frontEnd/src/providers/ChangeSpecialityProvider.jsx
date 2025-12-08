@@ -17,13 +17,15 @@ const ChangeSpecialityProvider = ({ children }) => {
     const fetchDoctorBasedOnSpacility = async () => {
         try {
 
-            if (speciality !== "all") {
-                const { data: { data } } = await axios.get(backendURL + `/api/v1/doctors?specialty=${speciality}`);
-                setDoctors(data)
-            } else {
+            if (!speciality) {
                 const { data: { data } } = await axios.get(backendURL + `/api/v1/doctors`);
-                setDoctors(data)
+                setDoctors(data);
+                return;
             }
+
+            const { data: { data } } = await axios.get(backendURL + `/api/v1/doctors?specialty=${speciality}`);
+            setDoctors(data);
+
 
         } catch (err) {
             let error;

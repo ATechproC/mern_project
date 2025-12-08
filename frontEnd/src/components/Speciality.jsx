@@ -9,7 +9,7 @@ const Speciality = () => {
 
     const navigate = useNavigate();
 
-    return <div className='my-20'>
+    return <div id='booking' className='my-20 scroll-mt-8'>
         <SectionHeader
             title="Find by Speciality"
             description="Simply browse through our extensive list of trusted doctors, schedule your appointment hassle-free."

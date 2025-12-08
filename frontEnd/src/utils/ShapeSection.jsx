@@ -13,10 +13,10 @@ const ShapeSection = ({ desc1, desc2, children, section }) => {
                     <h2> {desc2} </h2>
                 </div>
                 {children}
-                <button className='px-4 py-2 mt-5 bg-white rounded-[20px] flex-items gap-1 text-md'>
+                <a href='#booking' className='px-4 py-2 flex mt-5 bg-white rounded-[20px] align-items gap-2 text-md cursor-pointer w-[200px]'>
                     Book Appointment
                     <MdArrowRightAlt className='text-2xl' />
-                </button>
+                </a>
             </div>
             {
                 section === "booking" ? <div className='w-[88%]'>

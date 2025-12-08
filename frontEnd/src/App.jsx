@@ -10,23 +10,17 @@ import Home from "./pages/Home";
 import Doctors from "./pages/Doctors";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import AdminForm from "./components/AdminForm";
-import DoctorForm from "./components/DoctorForm";
 import Appointment from "./pages/Appointment";
 import NotFound from "./components/NotFound";
 import MyProfile from "./components/MyProfile";
 import Signup from "./components/Signup";
-// import Login from "./components/Login";
 import Appointments from "./components/Appointments";
-// import AdminPaned1 from "./pages/Admin/AdminPaned1";
-// import AdminPanel2 from "./pages/Admin/AdminPanel2";
 import ChangeSpecialityProvider from "./providers/ChangeSpecialityProvider";
 import AppProvider from "./providers/AppProvider";
 import { ToastContainer } from 'react-toastify';
 import ForgotPassword from "./components/ResetPassword/ForgotPassword";
 import VerifyResetCode from "./components/ResetPassword/VerifyResetCode";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
-// import DoctorsPorvider from "./providers/DoctorsPorvider";
 
 const App = () => {
 
@@ -43,15 +37,11 @@ const App = () => {
           <Route path="appointments/:doctorId" element={<Appointment />} />
           <Route path="appointments" element={<Appointments />} />
           <Route path="/my-profile" element={<MyProfile />} />
-          {/* <Route path="/admin1" element={<AdminPaned1 />} /> */}
-          {/* <Route path="/admin2" element={<AdminPanel2 />} /> */}
         </Route>
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-resetCode" element={<VerifyResetCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/admin-login" element={<AdminForm />} />
-        <Route path="/doctor-login" element={<DoctorForm />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     )
@@ -60,12 +50,10 @@ const App = () => {
   return (
     <div className="w-[80%] m-auto mt-[10px] overflow-hidden">
       <AppProvider>
-        {/* <DoctorsPorvider> */}
-          <ChangeSpecialityProvider>
-            <RouterProvider router={router} />
-            <ToastContainer />
-          </ChangeSpecialityProvider>
-        {/* </DoctorsPorvider> */}
+        <ChangeSpecialityProvider>
+          <RouterProvider router={router} />
+          <ToastContainer />
+        </ChangeSpecialityProvider>
       </AppProvider>
     </div>
   )

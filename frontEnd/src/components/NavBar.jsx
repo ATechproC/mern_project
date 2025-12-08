@@ -90,9 +90,9 @@ const NavBar = () => {
                 })
             }
             <button
-                onClick={() => {
-                    navigate("/admin")
-                }}
+                // onClick={() => {
+                //     navigate("/admin")
+                // }}
                 className="border-gray-400 border-[1px] text-sm rounded-2xl py-[2px] px-[10px]">Admin panel</button>
         </ul>
         {
@@ -100,7 +100,9 @@ const NavBar = () => {
                 onMouseEnter={() => whileMouseHovered("enter")}
                 onMouseLeave={() => whileMouseHovered("leave")}
             >
-                <div className="w-[45px] h-[45px] rounded-full overflow-hidden cursor-pointer">
+                <div
+                    onClick={() => navigate("/my-profile")}
+                    className="w-[45px] h-[45px] rounded-full overflow-hidden cursor-pointer">
                     <img
                         className="w-full h-full"
                         src={userData.image ? userData.image : assets.upload_area}

@@ -28,11 +28,11 @@ const BoxOfCards = () => {
 
     useEffect(() => {
         getAllDoctors();
-    }, [])
+    }, []);
 
-    return (doctors && doctors.length > 0) && <div className='grid-cols-4 md:grid gap-7 flex-column'>
+    return doctors && <div className='grid-cols-4 md:grid gap-7 flex-column'>
         {
-            doctors.map(({ _id, name, speciality, image }) => {
+            doctors.map(({ _id, name, specialty, image, available }) => {
                 return <div
                     key={_id} className='border-gray-300 border-[1px] rounded-xl overflow-hidden hover:-translate-y-1 transition duration-300'>
                     <div onClick={() => {
@@ -41,9 +41,13 @@ const BoxOfCards = () => {
                     }} className='bg-secondary-color h-[300px] cursor-pointer'>
                         <img src={image} draggable={false} className='w-full h-full object-fit' />
                     </div>
-                    <div className='p-3 text-center bg-white'>
-                        <p className='font-semibold text-[15px]'>{name}</p>
-                        <p className='text-[13px] text-gray-400'>{speciality}</p>
+                    <div className='p-3 bg-white'>
+                        <div className='flex-items gap-2 text-left'>
+                            <div className={`w-[10px] h-[10px] rounded-full ${available ? "bg-green-600" : "bg-red-600"}`} />
+                            <label htmlFor='availablity' className={`font-bold ${available ? "text-green-600" : "text-red-600"}`}>Availablity</label>
+                        </div>
+                        <p className='font-bold text-[25px] text-center'>{name}</p>
+                        <p className='text-[15px] text-gray-500 text-center'>{specialty}</p>
                     </div>
                 </div>
             })

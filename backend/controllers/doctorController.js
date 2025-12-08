@@ -242,7 +242,7 @@ exports.getDoctorDashData = async_handler(async (req, res) => {
     let earings = 0;
 
     appointments.forEach(item => {
-        if (item.isCompleted) earings += item.amount;
+        if (item.isCompleted && !item.cancelled) earings += item.amount;
     })
 
     const dashData = {

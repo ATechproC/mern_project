@@ -23,6 +23,7 @@ const App = () => {
     createRoutesFromElements(
       <Route path="/" element={<NavBar />} >
 
+        <Route index element={<></>} />
         <Route path='admin-dashboard' element={<AdminDashboard />} />
         <Route path='add-doctor' element={<AddDoctor />} />
         <Route path='all-appointments' element={<AllAppointments />} />
@@ -35,7 +36,7 @@ const App = () => {
   const doctorRouter = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<NavBar />} >
-
+        <Route index element={<></>} />
         <Route path="doctor-dashboard" element={<DoctorDashboard />} />
         <Route path="doctor-appointments" element={<DoctorAppointments />} />
         <Route path="doctor-profile" element={<DoctorProfile />} />

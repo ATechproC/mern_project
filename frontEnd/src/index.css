@@ -10,10 +10,15 @@
         font-family: sans-serif;
     }
 
+    html {
+        scroll-behavior: smooth;
+    }
+    
     body {
         background-color: #fff;
         height: 100vh;
     }
+
 }
 
 @layer components {

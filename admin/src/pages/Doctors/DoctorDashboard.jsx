@@ -64,7 +64,28 @@ const DoctorDashboard = () => {
 
     useEffect(() => {
         fetchDashData();
-    }, [])
+    }, []);
+
+    const cancelAppointment = async (id) => {
+        if (!dToken) return toast.warn("Please Login");
+        try {
+
+            const { data: { message } } = await axios.post(backendURL + `/api/v1/doctors/cancel-appointment/${id}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${dToken}`
+                }
+            })
+
+            toast.success(message);
+            await fetchDashData();
+
+        } catch (err) {
+            let error;
+            if (err.response) error = err.response.data.message || err.response.data.errors[0].msg;
+            else error = err.message;
+            toast.error(error);
+        }
+    }
 
     return <div className=''>
         <div className='w-[85%] absolute right-0 p-4'>
